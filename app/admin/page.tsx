@@ -3,7 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 
+const ADMIN_PIN = "raebareli2026"; // Set your secret admin password here
+
 export default function AdminPage() {
+  const [pinInput, setPinInput] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authError, setAuthError] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     doctor: "",
@@ -18,9 +24,19 @@ export default function AdminPage() {
   const [submittedClinics, setSubmittedClinics] = useState<any[]>([]);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (pinInput === ADMIN_PIN) {
+      setIsAuthenticated(true);
+      setAuthError(false);
+    } else {
+      setAuthError(true);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const newEntry = {
       ...formData,
       id: Date.now(),
@@ -45,9 +61,58 @@ export default function AdminPage() {
     setTimeout(() => setIsSuccess(false), 4000);
   };
 
+  // Password Lock Screen
+  if (!isAuthenticated) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-white p-8 rounded-xl shadow-md border border-gray-200 max-w-md w-full">
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-bold text-gray-900">Admin Authentication</h1>
+            <p className="text-sm text-gray-500 mt-1">Enter your secret passkey to access entry portal</p>
+          </div>
+
+          {authError && (
+            <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm text-center">
+              Incorrect password. Please try again.
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Admin Passkey
+              </label>
+              <input
+                type="password"
+                required
+                placeholder="Enter password"
+                value={pinInput}
+                onChange={(e) => setPinInput(e.target.value)}
+                className="w-full border border-gray-300 px-4 py-2.5 rounded-lg text-gray-800 focus:ring-2 focus:ring-blue-600 outline-none"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-blue-700 text-white font-bold py-2.5 rounded-lg hover:bg-blue-800 transition-colors"
+            >
+              Unlock Portal
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <Link href="/" className="text-sm text-blue-600 hover:underline">
+              ← Return to Main Site
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  // Unlocked Admin Form Interface
   return (
     <main className="min-h-screen bg-gray-50 pb-12">
-      {/* Admin Header */}
       <header className="bg-blue-800 text-white py-6 px-4 shadow-md">
         <div className="max-w-3xl mx-auto flex justify-between items-center">
           <div>
@@ -63,7 +128,6 @@ export default function AdminPage() {
         </div>
       </header>
 
-      {/* Admin Content Form */}
       <div className="max-w-3xl mx-auto px-4 mt-8">
         {isSuccess && (
           <div className="mb-6 p-4 bg-green-100 border border-green-300 text-green-800 rounded-xl text-sm font-semibold">
@@ -212,7 +276,6 @@ export default function AdminPage() {
           </form>
         </div>
 
-        {/* Recently Added List */}
         {submittedClinics.length > 0 && (
           <div className="mt-8">
             <h3 className="text-lg font-bold text-gray-800 mb-3">
