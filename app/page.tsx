@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
-// Real Initial Data from Raebareli Excel Collection
 const INITIAL_CLINICS = [
   {
     id: 1,
@@ -189,19 +189,24 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50 pb-12">
-      {/* Header */}
       <header className="bg-blue-700 text-white py-6 px-4 shadow-md">
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-3xl font-bold">Raebareli Health Discovery</h1>
-          <p className="mt-2 text-blue-100 text-sm">
-            One city, one platform — find doctors and clinics across Raebareli instantly.
-          </p>
+        <div className="max-w-5xl mx-auto flex justify-between items-center gap-4">
+          <div className="text-left">
+            <h1 className="text-2xl md:text-3xl font-bold">Raebareli Health Discovery</h1>
+            <p className="mt-1 text-blue-100 text-xs md:text-sm">
+              One city, one platform — find doctors and clinics across Raebareli instantly.
+            </p>
+          </div>
+          <Link
+            href="/admin"
+            className="bg-blue-900 hover:bg-blue-950 text-white text-xs md:text-sm font-semibold px-4 py-2.5 rounded-lg border border-blue-400 shadow transition-all whitespace-nowrap shrink-0"
+          >
+            + Admin Portal
+          </Link>
         </div>
       </header>
 
-      {/* Main Container */}
       <div className="max-w-5xl mx-auto px-4 mt-8">
-        {/* Search & Filter Controls */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8 space-y-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -217,7 +222,6 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Specialization Filter */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Medical Specialization
@@ -235,7 +239,6 @@ export default function Home() {
               </select>
             </div>
 
-            {/* Area Filter */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
                 Locality / Area in Raebareli
@@ -255,7 +258,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Results List */}
         <h2 className="text-xl font-bold text-gray-800 mb-4">
           Verified Raebareli Clinics ({filteredClinics.length})
         </h2>
@@ -296,13 +298,7 @@ export default function Home() {
 
                 <div className="mt-5 flex gap-3 pt-2">
                   <a
-                    href={`tel:${clinic.phone}`}
-                    className="flex-1 bg-blue-600 text-white text-center py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-                  >
-                    Call Clinic
-                  </a>
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    href={`tel:${clinic.phone}`} className="flex-1 bg-blue-600 text-white text-center py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors" > Call Clinic </a> <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
                       clinic.name + " " + clinic.address
                     )}`}
                     target="_blank"
